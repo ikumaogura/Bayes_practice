@@ -3,7 +3,7 @@
 using namespace Rcpp;
 using namespace arma;
 
-/* Sampling from a truncated normal distribution using inverse CDF methid. 
+/* Sampling from a truncated normal distribution using inverse CDF method. 
  For the detail on the script below, see Jackman(2009) Example 3.6 (pp. 154-6), 
  Lynch (2007) Section 8.1.3 (pp. 200-6), and 
  the Wikipedia entry for truncate normal distribution */
