@@ -8,15 +8,15 @@ using namespace arma;
  Lynch (2007) Section 8.1.3 (pp. 200-6), and 
  the Wikipedia entry for truncate normal distribution */
 // [[Rcpp::export]]
-NumericVector rtruncnormC (int n, double mu, double sigma, 
-                           double lower, double upper){
-  double alpha = R::pnorm((lower - mu)/sigma, 0, 1, true, false);
-  double beta = R::pnorm((upper - mu)/sigma, 0, 1, true, false);
-  NumericVector out(n);
-  for (int i = 0; i < n; i++){
+vec rtruncnormC (vec mu, double sigma, double lower, double upper){
+  int n = mu.size();
+  vec out(n);
+  for (int i = 0; i < n; i ++ ){
+    double alpha = R::pnorm((lower - mu(i))/sigma, 0, 1, true, false);
+    double beta = R::pnorm((upper - mu(i))/sigma, 0, 1, true, false);
     double u = R::runif(0, 1);
     double p = alpha + u * (beta - alpha);
-    out(i) = R::qnorm(p, 0, 1, true, false) * sigma + mu;
+    out(i) = R::qnorm(p, 0, 1, true, false) * sigma + mu(i);
   }
   return out;
 }
