@@ -5,24 +5,13 @@ using namespace arma;
 
 /* Drawing random numbers from a multivariate normal distribution.
    See the Wikipedia entry for multivariate normal distribution for detail.
-   Also see http://gallery.rcpp.org/articles/simulate-multivariate-normal/ 
-   for another implementation */
+   The code is adopted from 
+   http://gallery.rcpp.org/articles/simulate-multivariate-normal/ 
+   Returns a n-by-ncols matrix of random numbers */
 // [[Rcpp::export]]
-vec rmvnormC (vec mu, mat Sigma){
-  vec eigval;
-  mat eigvec;
-  eig_sym(eigval, eigvec, Sigma);
-  mat lambda = sqrtmat_sympd(diagmat(eigval));
-  mat A = eigvec * lambda;
-  int n = mu.size();
-  vec z = rnorm(n, 0, 1);
-  vec x = mu + A * z;
-  return x;
+mat mvrnormArma(int n, vec mu, mat Sigma) {
+  int ncols = Sigma.n_cols;
+  mat Y = randn(n, ncols);
+  return repmat(mu, 1, n).t() + Y * arma::chol(Sigma);
 }
-vec rmvnormC1 (vec mu, mat Sigma){
-  mat A = chol(Sigma);
-  int n = mu.size();
-  vec z = rnorm(n, 0, 1);
-  vec x = mu + A * z;
-  return x;
-}
+
